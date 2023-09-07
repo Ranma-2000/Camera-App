@@ -1,0 +1,45 @@
+Scan IP on Ubuntu
+    sudo apt-get update
+    sudo apt-get install arp-scan
+    sudo arp-scan -l | sort
+
+Scan IP on Windows
+    Advanced IP Scanner
+
+Install picamera on PC
+    sudo pip3 install git+https://github.com/waveform80/picamera
+
+1. Driver
+    Driver dùng trên raspberry là bcm2835_v4l2, một driver được viết và chạy trên Raspberry OS.
+    Có thể các module raspberry khác nhau thì driver khác nhau.
+
+2. Thư viện
+    Dùng PiCamera để giao tiếp với driver và camera.
+
+*Note 1: Đối với tác vụ điều khiển camera, cần lưu ý, một số dòng camera sẽ sử dụng các driver (driver dùng chung cho nhiều loại camera)
+    có sẵn trên thị trường và chỉ cung cấp thư viện.
+
+3. PiCamera.wait_recording()
+    Thường được dùng để check nguyên nhân (exception or error) trong quá trình ghi hình (recording) ví dụ như out of disk space, out of memory, etc.
+    Bởi vì, PiCamera.start_recording() khi gặp lỗi sẽ dừng đọc và ghi data, nhưng không báo lỗi.
+    Chỉ có PiCamera.stop_recording() và PiCamera.wait_recording() mới báo lỗi.
+
+4. Kiểu lỗi điểm ảnh nhưng không phải Hot pixel, dead pixel hay stuck pixel
+    Xảy ra khi camera chụp ảnh có exposure time cao, nhưng shutter speed không đáp ứng đủ thời gian. Khi đó, nếu vùng cần chụp
+    có ánh sáng không đều thì những chỗ ánh sáng yếu sẽ bị lỗi điểm ảnh.
+    Lỗi này có thể sẽ có sự khác biệt khi camera có chế độ Rolling shutter và Global shutter.
+
+5. Học về io.BytesIO()
+    io.BytesIO() là một buffer, nó có thể được dùng để lưu trữ dữ liệu như một file, nhưng không cần phải lưu trữ trên ổ cứng.
+
+6. Đối với picamera, có hai chế độ, 1 là start_preview, 2 là start_recording. Việc viết app api chạy chế độ nào thì cần xem xét.
+    start_preview: chế độ này sẽ hiển thị ảnh realtime trên màn hình, nhưng không thể lưu lại được ảnh. Có thể chụp ảnh bằng capture()
+    start_recording: chế độ này sẽ không hiển thị ảnh realtime trên màn hình, nhưng có thể lưu lại được ảnh.
+
+7. Trong python, không thể truy suất địa chỉ trong heap của biến (biến chứa một giá trị). Nhằm tăng tính bảo mật. Python tự quản lý vấn đề này.
+    Chỉ có thể truy suất địa chỉ trong memory của một giá trị mà biến đó trỏ đến.
+    Ví dụ: x = None và y = None, thì id(x) và id(y) sẽ trả về địa chỉ của None, và id(x) == id(y) == 4692132.
+
+8. Một phương pháp tìm kiếm giá trị focus tốt nhất, đó là chụp nhiều ảnh với các giá trị focus khác nhau, sau đó chọn ra ảnh có focus tốt nhất.
+    Để làm được điều này, cần phải có một phương pháp đánh giá focus của ảnh.
+    Có các metrics để đánh giá như: sharpness metrics (Gradient-based Sharpness Metrics), variance of Laplacian, etc.

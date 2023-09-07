@@ -1,0 +1,22 @@
+For Raspberry Bulleye 11 OS
+
+1. Enable GL Driver
+cmd: sudo raspi-config
+Then navigate to Advanced Options -> GL Driver -> GL (Full KMS) OpenGL desktop driver with full KMS.
+Then reboot.
+
+2. Enable Camera
+cmd: sudo raspi-config
+Then navigate to Interfacing Options -> Legacy Camera -> Yes.
+Then reboot.
+
+3. Downloads the install script
+wget -O install_pivariety_pkgs.sh https://github.com/ArduCAM/Arducam-Pivariety-V4L2-Driver/releases/download/install_script/install_pivariety_pkgs.sh
+chmod +rwx install_pivariety_pkgs.sh
+
+4. Run the install script
+./install_pivariety_pkgs.sh -p libcamera-dev
+./install_pivariety_pkgs.sh -p libcamera-apps
+
+5. Install the Arducam Pivariety V4L2 Driver
+./install_pivariety_pkgs.sh -p imx519_kernel_driver
